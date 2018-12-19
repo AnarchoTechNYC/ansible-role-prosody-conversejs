@@ -1,0 +1,35 @@
+---
+- name: Install dependencies.
+  package:
+    name: git
+    state: present
+
+- name: Ensure ConverseJS HTTP directory exists.
+  file:
+    path: "{{ conversejs_files_dir }}"
+    state: directory
+    owner: "{{ prosody_server_username }}"
+    group: "{{ prosody_server_username }}"
+    mode: "700"
+
+- name: Ensure parent ConverseJS src directory exists.
+  file:
+    path: /usr/local/src
+    state: directory
+
+- name: Clone ConverseJS source code.
+  git:
+    repo: https://github.com/conversejs/converse.js.git
+    dest: "{{ conversejs_files_dir }}"
+    depth: 1
+    separate_git_dir: /usr/local/src/converse.js.git
+
+- name: Install libsignal-protocol.js for ConverseJS.
+  when: conversejs_libsignal is defined
+  get_url:
+    url: "https://github.com/signalapp/libsignal-protocol-javascript/raw/{{ conversejs_libsignal.version }}/dist/libsignal-protocol.js"
+    dest: "{{ conversejs_libsignal.path }}"
+    checksum: "{{ conversejs_libsignal.checksum | default(omit) }}"
+    owner: "{{ prosody_server_username }}"
+    group: "{{ prosody_server_username }}"
+    mode: "600"

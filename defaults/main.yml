@@ -1,0 +1,6 @@
+---
+conversejs_files_dir: "{{ prosody_http_files_dir | default('/var/www/prosody') }}/converse.js"
+conversejs_libsignal:
+  path: "{{ prosody_http_files_dir | default('/var/www/prosody') }}/libsignal-protocol.js"
+  version: master
+  #checksum: sha1:b2a03cfa34a76be969d86c5ff9484d0f7de25c4a

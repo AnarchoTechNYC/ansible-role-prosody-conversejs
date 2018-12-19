@@ -1,0 +1,8 @@
+---
+dependencies:
+  - prosody
+
+galaxy_info:
+  role_name: prosody-conversejs
+  author: AnarchoTechNYC
+  description: Deploy ConverseJS on Prosody without a CDN.
