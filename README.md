@@ -71,7 +71,7 @@ This role provides the following default variables:
 
 ## Configuring Prosody to self-host ConverseJS
 
-All that is required to convert [the above Prosody configuration that uses the ConverseJS CDN](#configuring-prosody-for-conversejs) to a self-hosted version is:
+All that is required to convert [the above Prosody configuration that uses the ConverseJS CDN](#configuring-prosody-for-conversejs) to a self-hosted variant is:
 
 1. Add the following Prosody configuration options to the `VirtualHost` dictionary where the other ConverseJS options reside:
     ```yml
@@ -81,8 +81,18 @@ All that is required to convert [the above Prosody configuration that uses the C
 1. Change the `conversejs_tags` list item loading the Signal Protocol library to the one downloaded by this role. For example:
     ```yml
     conversejs_tags:
-    # This script provides Signal Protocol support (needed for OMEMO).
     - '<script src="http://example.com:8443/files/libsignal-protocol.js"></script>'
+    ```
+1. Add the `http_files` module to the list of Prosody's enabled modules so that the self-hosted ConverseJS and Signal Protocol library files will be served over HTTP:
+    ```yml
+    modules_enabled:
+      - […] # Other modules.
+      - http_files
+      - […] # Latter modules, if any.
+    ```
+1. Define a document root for the Prosody HTTP server module:
+    ```yml
+    http_files_dir: "{{ prosody_http_files_dir }}" # Defaults to `/var/www/prosody`
     ```
 
 The above changes will serve ConverseJS from the `example.com` server's alternate HTTPS port (`8443`).
